@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeDEbug | Home</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body { background-color: #f9fafb; font-family: 'Inter', sans-serif; }
+        .chat-container {
+            max-width: 850px; margin: 0 auto; height: 70vh; overflow-y: auto;
+            background-color: white; border-radius: 1rem; box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+        }
+        .chat-bubble { padding: 0.75rem 1rem; border-radius: 1rem; margin-bottom: 1rem; max-width: 80%; }
+        .user-msg { background-color: #dbeafe; align-self: flex-end; text-align: right; }
+        .bot-msg { background-color: #f3f4f6; align-self: flex-start; }
+        .chat-input-bar {
+            background-color: white; border-radius: 1rem; padding: 0.75rem 1rem;
+            display: flex; align-items: center; box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+        }
+        .chat-input { flex: 1; resize: none; border: none; outline: none; padding: 0.5rem; font-size: 1rem; }
+        footer { background-color: #1e293b; color: white; }
+        .image-icon { cursor: pointer; }
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+<!-- 🔹 Navbar -->
+<header class="bg-blue-600 text-white p-4 flex justify-between items-center shadow-md">
+    <div class="flex items-center space-x-3">
+        <!-- If you have a logo image, use this instead -->
+        <img src="/images/logo.png" alt="CodeDEbug Logo" class="w-10 h-10">
+        <span class="logo-text text-white">CodeTbug</span>
+    </div>
+    <nav>
+        <a href="/home" class="px-4 hover:underline">Home</a>
+        <a href="/history" class="px-4 hover:underline">History</a>
+    </nav>
+</header>
+
+<!-- 🔹 Chat Section -->
+<main class="flex-1 flex flex-col p-6">
+    <div class="chat-container flex flex-col mb-4">
+        <div th:if="${prompt}" class="chat-bubble user-msg self-end">
+            <p class="font-medium text-gray-900" th:text="${prompt}"></p>
+        </div>
+        <div th:if="${response}" class="chat-bubble bot-msg self-start">
+            <p class="font-medium text-gray-800 whitespace-pre-wrap" th:text="${response}"></p>
+        </div>
+        <div th:if="${error}" class="chat-bubble bot-msg bg-red-100 border border-red-300 self-start">
+            <p class="text-red-600 font-medium" th:text="${error}"></p>
+        </div>
+    </div>
+
+    <form id="chatForm" th:action="@{/chat}" method="post" enctype="multipart/form-data"
+          class="chat-input-bar space-x-3">
+
+        <input type="file" id="fileInput" name="file" accept="image/*" class="hidden">
+
+        <!-- Upload Icon -->
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+             stroke-width="1.5" stroke="currentColor"
+             class="w-6 h-6 text-gray-600 hover:text-blue-600 image-icon"
+             onclick="document.getElementById('fileInput').click()">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M12 16.5V9.75m0 0l3.75 3.75M12 9.75L8.25 13.5m-2.25 5.25h12.75a2.25 2.25 0 002.25-2.25V7.5A2.25 2.25 0 0018.75 5.25H5.25A2.25 2.25 0 003 7.5v9.75a2.25 2.25 0 002.25 2.25z" />
+        </svg>
+
+        <textarea name="prompt" id="promptInput" placeholder="Send a message or attach an image..."
+                  rows="1" class="chat-input"></textarea>
+
+        <button type="submit"
+                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+            Send
+        </button>
+    </form>
+</main>
+
+<footer class="mt-8 py-4 text-center">
+    <p class="text-sm">&copy; 2025 CodeTbug | Powered by Spring Boot + Thymeleaf</p>
+</footer>
+
+<script>
+    const textarea = document.getElementById('promptInput');
+    textarea.addEventListener('input', () => {
+        textarea.style.height = 'auto';
+        textarea.style.height = textarea.scrollHeight + 'px';
+    });
+
+    const form = document.getElementById('chatForm');
+    const fileInput = document.getElementById('fileInput');
+    form.addEventListener('submit', (e) => {
+        if (fileInput.files.length > 0) {
+            form.action = '/image';
+        } else {
+            form.action = '/chat';
+        }
+    });
+</script>
+
+</body>
+</html>

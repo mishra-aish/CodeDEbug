@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeDEbug | History</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.5rem;
+            letter-spacing: -0.02em;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+
+<!-- 🔹 Header -->
+<header class="bg-blue-600 text-white p-4 flex justify-between items-center shadow-md">
+    <div class="flex items-center space-x-3">
+        <!-- If you have a logo image -->
+        <img src="/images/logo.png" alt="CodeDEbug Logo" class="w-10 h-10">
+        <span class="logo-text text-white">CodeTbug</span>
+    </div>
+    <nav>
+        <a href="/home" class="px-4 hover:underline">Home</a>
+        <a href="/history" class="px-4 hover:underline">History</a>
+    </nav>
+</header>
+
+<!-- 🔹 History Section -->
+<main class="flex-1 container mx-auto p-6">
+    <div class="bg-white rounded-2xl shadow-md p-6">
+        <h2 class="text-xl font-semibold mb-4">📜 Previous Prompts & Responses</h2>
+
+        <div th:if="${history == null or #lists.isEmpty(history)}" class="text-gray-500">
+            No chat history available.
+        </div>
+
+        <div th:each="item : ${history}" class="border-b py-4">
+            <p class="font-semibold text-gray-700">🧑 Prompt:</p>
+            <p th:text="${item.prompt}" class="text-gray-900 mb-2"></p>
+
+            <p class="font-semibold text-gray-700">🤖 Response:</p>
+            <pre th:text="${item.response}" class="whitespace-pre-wrap bg-gray-100 p-3 rounded-lg"></pre>
+        </div>
+    </div>
+</main>
+
+<!-- 🔹 Footer -->
+<footer class="bg-gray-900 text-white text-center py-3 mt-8">
+    <p class="text-sm">&copy; 2025 CodeTbug | Designed for interactive AI experiences</p>
+</footer>
+
+</body>
+</html>
