@@ -74,12 +74,12 @@ public class GenAIcontroller {
     }
 
     @GetMapping("/history")
-    public String promptHistory(Model model) {
-        model.addAttribute("history", textService.getPromptHistory());
-        return "promptHistory";
-    }
+public String promptHistory(Model model) {
+    model.addAttribute("history", textService.getPromptHistory());
+    return "promptHistory";
+}
 
-    /** ✅ Cleans AI output */
+
     private String formatStructuredResponse(String raw) {
         if (raw == null || raw.isBlank()) return "No response received.";
 

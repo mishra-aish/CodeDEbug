@@ -1,4 +1,6 @@
 /Users/macbook/Desktop/JavaAI/src/main/java/com/genAiI/JavaAI/Controller/GenAIcontroller.java
 /Users/macbook/Desktop/JavaAI/src/main/java/com/genAiI/JavaAI/JavaAiApplication.java
+/Users/macbook/Desktop/JavaAI/src/main/java/com/genAiI/JavaAI/Model/ImageHistoryItem.java
+/Users/macbook/Desktop/JavaAI/src/main/java/com/genAiI/JavaAI/Model/PromptHistoryItem.java
 /Users/macbook/Desktop/JavaAI/src/main/java/com/genAiI/JavaAI/Service/GenAIservice.java
 /Users/macbook/Desktop/JavaAI/src/main/java/com/genAiI/JavaAI/Service/ImageAIService.java

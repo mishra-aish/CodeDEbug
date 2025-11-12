@@ -9,11 +9,13 @@ import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.stereotype.Service;
 
+import com.genAiI.JavaAI.Model.PromptHistoryItem;
+
 @Service
 public class GenAIservice {
 
     private final ChatClient chatClient;
-    private final List<String> promptHistory = new ArrayList<>();
+    private final List<PromptHistoryItem> promptHistory = new ArrayList<>();
 
     public GenAIservice(ChatClient.Builder builder, ChatMemory chatMemory) {
         this.chatClient = builder
@@ -65,11 +67,14 @@ You must strictly adhere to the following topics. All answers must be technicall
                 .call()
                 .content();
 
-        promptHistory.add(prompts);
+        promptHistory.add(new PromptHistoryItem(prompts, response));
         return response;
     }
 
-    public List<String> getPromptHistory() {
-        return new ArrayList<>(promptHistory);
-    }
+    public List<PromptHistoryItem> getPromptHistory() {
+    return new ArrayList<>(promptHistory);
+}
+
+
+    
 }

@@ -11,11 +11,12 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MimeType;
 
+import com.genAiI.JavaAI.Model.ImageHistoryItem;
 @Service
 public class ImageAIService {
 
     private final ChatClient chatClient;
-    private final List<String> imagePromptHistory = new ArrayList<>();
+    private final List<ImageHistoryItem> imagePromptHistory = new ArrayList<>();
 
     public ImageAIService(ChatClient.Builder builder) {
         this.chatClient = builder
@@ -69,11 +70,11 @@ You must strictly adhere to the following topics. All answers must be technicall
                 .call()
                 .content();
 
-        imagePromptHistory.add(prompt);
+        imagePromptHistory.add(new ImageHistoryItem(prompt, response));
         return response;
     }
 
-    public List<String> getImagePromptHistory() {
+    public List<ImageHistoryItem> getImagePromptHistory() {
         return new ArrayList<>(imagePromptHistory);
     }
 }

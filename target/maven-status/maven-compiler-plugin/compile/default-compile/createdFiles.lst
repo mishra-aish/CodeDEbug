@@ -1,4 +1,6 @@
 com/genAiI/JavaAI/JavaAiApplication.class
+com/genAiI/JavaAI/Model/ImageHistoryItem.class
 com/genAiI/JavaAI/Controller/GenAIcontroller.class
+com/genAiI/JavaAI/Model/PromptHistoryItem.class
 com/genAiI/JavaAI/Service/GenAIservice.class
 com/genAiI/JavaAI/Service/ImageAIService.class
