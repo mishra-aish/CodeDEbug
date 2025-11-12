@@ -1,39 +1,44 @@
 # ===========================
 # 🧱 1. Build Stage
 # ===========================
-FROM maven:3.9.6-eclipse-temurin-21 AS builder
+# Use Maven with Temurin JDK 25 for building
+FROM maven:3.9.9-eclipse-temurin-25 AS builder
 
 # Set working directory
 WORKDIR /app
 
-# Copy Maven descriptor files first (for caching dependencies)
+# Copy Maven wrapper and configuration for caching dependencies
 COPY pom.xml .
-COPY .mvn .mvn
 COPY mvnw .
 COPY mvnw.cmd .
+COPY .mvn .mvn
 
-# Download dependencies (improves caching)
+# Make mvnw executable
+RUN chmod +x mvnw
+
+# Download dependencies to cache Maven layers
 RUN ./mvnw dependency:go-offline -B
 
-# Copy source code
+# Copy project source
 COPY src ./src
 
-# Build the application (creates JAR in target/)
+# Build the Spring Boot JAR (skip tests for faster build)
 RUN ./mvnw clean package -DskipTests
 
 # ===========================
 # ☕ 2. Runtime Stage
 # ===========================
-FROM eclipse-temurin:21-jdk-jammy
+# Use lightweight Temurin JDK 25 runtime
+FROM eclipse-temurin:25-jdk-jammy
 
-# Set working directory inside container
+# Set working directory
 WORKDIR /app
 
-# Copy built JAR from builder stage
+# Copy the built JAR file from builder stage
 COPY --from=builder /app/target/*.jar app.jar
 
-# Expose the application port (default: 8080)
+# Expose Spring Boot default port
 EXPOSE 8080
 
-# Command to run the application
+# Run the Spring Boot app
 ENTRYPOINT ["java", "-jar", "app.jar"]
