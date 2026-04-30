@@ -32,12 +32,11 @@
 </head>
 <body class="flex flex-col min-h-screen">
 
-<!-- 🔹 Navbar -->
+<!-- Navbar -->
 <header class="bg-blue-600 text-white p-4 flex justify-between items-center shadow-md">
     <div class="flex items-center space-x-3">
-        <!-- If you have a logo image, use this instead -->
-        <img src="/images/logo.png" alt="CodeDEbug Logo" class="w-10 h-10">
-        <span class="logo-text text-white">CodeDEbug</span>
+        <img src="/images/logo.png" alt="Logo" class="w-10 h-10">
+        <span class="logo-text">CodeDEbug</span>
     </div>
     <nav>
         <a href="/home" class="px-4 hover:underline">Home</a>
@@ -45,71 +44,86 @@
     </nav>
 </header>
 
-<!-- 🔹 Chat Section -->
+<!-- Chat -->
 <main class="flex-1 flex flex-col p-6">
     <div class="chat-container flex flex-col mb-4">
         <div th:if="${prompt}" class="chat-bubble user-msg self-end">
-            <p class="font-medium text-gray-900" th:text="${prompt}"></p>
+            <p th:text="${prompt}"></p>
         </div>
         <div th:if="${response}" class="chat-bubble bot-msg self-start">
-            <p class="font-medium text-gray-800 whitespace-pre-wrap" th:text="${response}"></p>
+            <p class="whitespace-pre-wrap" th:text="${response}"></p>
         </div>
         <div th:if="${error}" class="chat-bubble bot-msg bg-red-100 border border-red-300 self-start">
-            <p class="text-red-600 font-medium" th:text="${error}"></p>
+            <p class="text-red-600" th:text="${error}"></p>
         </div>
     </div>
 
-    <form id="chatForm" th:action="@{/chat}" method="post" enctype="multipart/form-data"
+    <form id="chatForm" method="post" enctype="multipart/form-data"
           class="chat-input-bar space-x-3">
 
         <input type="file" id="fileInput" name="file" accept="image/*" class="hidden">
 
-        <!-- Upload Icon -->
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-             stroke-width="1.5" stroke="currentColor"
-             class="w-6 h-6 text-gray-600 hover:text-blue-600 image-icon"
-             onclick="document.getElementById('fileInput').click()">
+        <!-- Upload -->
+        <svg onclick="document.getElementById('fileInput').click()"
+             xmlns="http://www.w3.org/2000/svg"
+             class="w-6 h-6 text-gray-600 cursor-pointer"
+             fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M12 16.5V9.75m0 0l3.75 3.75M12 9.75L8.25 13.5m-2.25 5.25h12.75a2.25 2.25 0 002.25-2.25V7.5A2.25 2.25 0 0018.75 5.25H5.25A2.25 2.25 0 003 7.5v9.75a2.25 2.25 0 002.25 2.25z" />
+                  d="M12 16.5V9.75m0 0l3.75 3.75M12 9.75L8.25 13.5"/>
         </svg>
 
-        <textarea name="prompt" id="promptInput" placeholder="Send a message or attach an image..."
+        <textarea name="prompt" id="promptInput"
+                  placeholder="Send a message..."
                   rows="1" class="chat-input"></textarea>
 
         <button type="submit"
-                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+                class="bg-blue-600 text-white px-4 py-2 rounded-lg">
             Send
         </button>
     </form>
 </main>
 
 <footer class="mt-8 py-4 text-center">
-    <p class="text-sm">&copy; 2025 CodeDEbug | Made by Aishwarya</p>
+    <p>&copy; 2025 CodeDEbug</p>
 </footer>
 
+<!-- 🔥 LOADER -->
+<div id="loaderOverlay"
+     style="display: none;"
+     class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+
+    <div class="flex flex-col items-center">
+        <div class="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+        <p class="text-white mt-4 text-lg">Thinking...</p>
+    </div>
+
+</div>
+
+<!-- 🔥 SCRIPT -->
 <script>
+    const form = document.getElementById('chatForm');
+    const fileInput = document.getElementById('fileInput');
+    const loader = document.getElementById('loaderOverlay');
     const textarea = document.getElementById('promptInput');
+
+    // Auto resize
     textarea.addEventListener('input', () => {
         textarea.style.height = 'auto';
         textarea.style.height = textarea.scrollHeight + 'px';
     });
 
-    const form = document.getElementById('chatForm');
-    const fileInput = document.getElementById('fileInput');
-    form.addEventListener('submit', (e) => {
+    form.addEventListener('submit', () => {
+        // Set endpoint
         if (fileInput.files.length > 0) {
             form.action = '/image';
         } else {
             form.action = '/chat';
         }
+
+        // 🔥 SHOW LOADER
+        loader.style.display = "flex";
     });
 </script>
 
-<div id="loaderOverlay" class="hidden fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-    <div class="flex flex-col items-center">
-        <div class="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
-        <p class="text-white mt-4 text-lg">Thinking...</p>
-    </div>
-</div>
 </body>
 </html>
